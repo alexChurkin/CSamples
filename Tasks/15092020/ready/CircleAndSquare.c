@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <math.h>
-#include <locale.h>
 
 /* 1. Взаимное расположение круга и квадрата */
 void main() {
-    setlocale(LC_CTYPE, "rus");
-
     float a, r;
     float d;
     scanf("%f %f", &a, &r);

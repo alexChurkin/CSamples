@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-/* Решение квадратных уравнений */
+/* 2. Решение квадратных уравнений */
 void main() {
     float a, b, c, D, x1, x2;
     float x, y;
