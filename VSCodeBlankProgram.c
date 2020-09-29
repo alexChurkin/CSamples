@@ -11,3 +11,5 @@ void main() {
 }
 //Для VS Code с расширением Code Runner и GCC (команда для компиляции кода на C):
 //cd $dir && gcc -finput-charset=UTF-8 -fexec-charset=cp1251 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt
+//Те же самые флаги для gcc в принципе:
+// -finput-charset=UTF-8 -fexec-charset=cp1251

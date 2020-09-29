@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <locale.h>
 
-/*
-4. 
+/* 
+6. 
 */
 void main() {
-    setlocale(LC_ALL, "");
+    setlocale(LC_CTYPE, "rus");
     
 }
