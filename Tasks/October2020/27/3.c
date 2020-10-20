@@ -3,8 +3,8 @@
 #include <math.h>
 #include <locale.h>
 
-/*
-7. 
+/* 
+3.
 */
 void main() {
     setlocale(LC_CTYPE, "rus");

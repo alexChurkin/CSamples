@@ -6,6 +6,7 @@
 
 /*
 4. Сортировка пузырьком 2 (шейкерная сортировка)
+   Замечание: очень важны скобки при инкременте значения по указателю на него (*number)++;
 */
 void printArray(int arr[], int size) {
     printf("[");
@@ -22,40 +23,32 @@ void exchange(int* a, int* b) {
 }
 
 //Сама сортировка
-int* bubbleSort(int arr[], int size) {
-    int compCount = 0;
-    int exchangesCount = 0;
-
+void bubbleSort(int arr[], int size, int *compCount, int *exchangesCount) {
     int l = 0, r = size - 1;
     bool sorted = false;
     while(!sorted) {
         sorted = true;
         for(int i = l; i < r; i++) {
-            compCount++;
+            (*compCount)++;
             if(arr[i] > arr[i + 1]) {
                 exchange(&arr[i], &arr[i + 1]);
                 sorted = false;
-                exchangesCount++;
+                (*exchangesCount)++;
                 //printArray(arr, size);
             }
         }
         r--;
         for(int i = r; i > l; i--) {
-            compCount++;
+            (*compCount)++;
             if(arr[i - 1] > arr[i]) {
                 exchange(&arr[i - 1], &arr[i]);
                 sorted = false;
-                exchangesCount++;
+                (*exchangesCount)++;
                 //printArray(arr, size);
             }
         }
         l++;
     }
-
-    int *p = (int*)malloc(2*sizeof(int));
-    p[0] = compCount;
-    p[1] = exchangesCount;
-    return p;
 }
 
 void main() {
@@ -82,10 +75,12 @@ void main() {
         for(int i = 0; i < size; i++)
             scanf("%i", &pointer[i]);
 
-        int* resultInfo = bubbleSort(pointer, size);
+        int compCount = 0;
+        int exchangesCount = 0;
+        //Передаём указатели на переменные
+        bubbleSort(pointer, size, &compCount, &exchangesCount);
         printArray(pointer, size);
-        printf("Сравнений: %i; обменов: %i\n\n", resultInfo[0], resultInfo[1]);
+        printf("Сравнений: %i; обменов: %i\n\n", compCount, exchangesCount);
         free(pointer);
-        free(resultInfo);
     }
 }
