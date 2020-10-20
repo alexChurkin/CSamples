@@ -4,9 +4,17 @@
 #include <locale.h>
 
 /*
-1. 
+1. Указатели - начало. Обмен значений переменных в отдельной функции
 */
+void exchange(int* a, int* b) {
+    int c = *a;
+    *a = *b;
+    *b = c;
+}
+
 void main() {
     setlocale(LC_CTYPE, "rus");
-    
+    int n = 2, m = 3;
+    exchange(&n, &m);
+    printf("n = %i, m = %i", n, m);
 }

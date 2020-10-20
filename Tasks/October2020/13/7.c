@@ -28,7 +28,7 @@ int getMinIndex(int arr[], int size) {
 }
 
 //Переворот сегмента массива от одного индекса до другого
-void reverseRangePart(int arr[], int size) {
+void reverseSegment(int arr[], int size) {
     int temp;
 
     int startIndex = getMaxIndex(arr, size);
@@ -67,6 +67,6 @@ void main() {
     int arr[] = {5, 1, 3, 4, 8, 6, 2, 3};
     //При изменении массива важно менять и размер!
     int size = 8;
-    reverseRangePart(arr, size);
+    reverseSegment(arr, size);
     printArray(arr, size);
 }
