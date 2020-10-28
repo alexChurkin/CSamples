@@ -15,12 +15,12 @@ void shaker_sort(int arr[], int size, int *comp_count, int *swap_count);
 void selection_sort(int arr[], int size, int *comp_count, int *swap_count);
 void insertion_sort(int arr[], int size, int *comp_count, int *swap_count, int mode);
 void counting_sort(int arr[], int size);
-void demonstrate_all_sorts(int *arr, int *tmp_arr, int size);
+void demonstrate_all(int *arr, int *tmp_arr, int size);
 
 //Вспомогательные функции
 int find_insert_position_linearly(int arr[], int right, int *comp_count);
 int find_insert_position_binary(int arr[], int right, int *comp_count);
-char* is_sorted(int arr[], int size);
+char *is_sorted(int arr[], int size);
 
 void print_menu();
 int *get_array(int *newsize);
@@ -66,7 +66,7 @@ void main()
             printf("Шейкерная сортировка:\n");
             print_array(arr, size, false);
             printf("Корректность - %s, сравнений - %i, замен - %i\n",
-                is_sorted(arr, size), comp_count, swap_count);
+                   is_sorted(arr, size), comp_count, swap_count);
             recover_old_array(arr, tmp_arr, size);
             break;
         case 4:
@@ -74,7 +74,7 @@ void main()
             printf("Сортировка выбором:\n");
             print_array(arr, size, false);
             printf("Корректность - %s, сравнений - %i, замен - %i\n",
-                is_sorted(arr, size), comp_count, swap_count);
+                   is_sorted(arr, size), comp_count, swap_count);
             recover_old_array(arr, tmp_arr, size);
             break;
         case 5:
@@ -82,7 +82,7 @@ void main()
             printf("Сортировка вставками (с бин. поиском):\n");
             print_array(arr, size, false);
             printf("Корректность - %s, сравнений - %i, замен - %i\n",
-                is_sorted(arr, size), comp_count, swap_count);
+                   is_sorted(arr, size), comp_count, swap_count);
             recover_old_array(arr, tmp_arr, size);
             break;
         case 6:
@@ -92,7 +92,7 @@ void main()
             recover_old_array(arr, tmp_arr, size);
             break;
         case 7:
-            demonstrate_all_sorts(arr, tmp_arr, size);
+            demonstrate_all(arr, tmp_arr, size);
             break;
         case 8:
             print_menu();
@@ -107,6 +107,7 @@ void shaker_sort(int arr[], int size, int *comp_count, int *swap_count)
     bool sorted = false;
     (*comp_count) = 0;
     (*swap_count) = 0;
+
     while (!sorted)
     {
         sorted = true;
@@ -115,9 +116,9 @@ void shaker_sort(int arr[], int size, int *comp_count, int *swap_count)
             (*comp_count)++;
             if (arr[i] > arr[i + 1])
             {
+                (*swap_count)++;
                 swap(&arr[i], &arr[i + 1]);
                 sorted = false;
-                (*swap_count)++;
             }
         }
         r--;
@@ -126,9 +127,9 @@ void shaker_sort(int arr[], int size, int *comp_count, int *swap_count)
             (*comp_count)++;
             if (arr[i - 1] > arr[i])
             {
+                (*swap_count)++;
                 swap(&arr[i - 1], &arr[i]);
                 sorted = false;
-                (*swap_count)++;
             }
         }
         l++;
@@ -152,8 +153,8 @@ void selection_sort(int arr[], int size, int *comp_count, int *swap_count)
                 pos = j;
         }
         //Перемещаем его в конец отсортированной части
-        swap(&arr[pos], &arr[i]);
         (*swap_count)++;
+        swap(&arr[pos], &arr[i]);
     }
 }
 
@@ -208,7 +209,7 @@ void counting_sort(int arr[], int size)
     free(count);
 }
 
-void demonstrate_all_sorts(int *arr, int *tmp_arr, int size)
+void demonstrate_all(int *arr, int *tmp_arr, int size)
 {
     time_t begin, end;
     int comp_count, swap_count;
@@ -247,6 +248,7 @@ void demonstrate_all_sorts(int *arr, int *tmp_arr, int size)
     printf("> Подсчётом:                     t = %f сек., корректность - %s\n",
            ((end - begin) / 1000.0), is_sorted(arr, size), comp_count, swap_count);
 }
+
 /* ........................  <Вспомогательные функции> ........................  */
 int find_insert_position_linearly(int arr[], int right, int *comp_count)
 {
@@ -266,32 +268,29 @@ int find_insert_position_linearly(int arr[], int right, int *comp_count)
 int find_insert_position_binary(int arr[], int right, int *comp_count)
 {
     int l = 0, r = right - 1, c;
-    while(l <= r) {
+    while (l <= r)
+    {
         c = (l + r) / 2;
-        if(arr[right] < arr[c])
-        {
-            (*comp_count)++;
+        (*comp_count)++;
+        if (arr[right] < arr[c])
             r = c - 1;
-        }
-        else if(arr[right] >= arr[c])
-        {
-            (*comp_count)+=2;
+        else
             l = c + 1;
-        }
     }
     return r + 1;
-    //(*comp_count)++;
-    //if(arr[right] <= arr[r]) return r;
-    //else return r + 1;
 }
 
-char* is_sorted(int arr[], int size) {
+char *is_sorted(int arr[], int size)
+{
     int i;
-    for(i = 1; i < size; i++) {
-        if(arr[i-1] > arr[i]) return "НЕТ!!!";
+    for (i = 1; i < size; i++)
+    {
+        if (arr[i - 1] > arr[i])
+            return "НЕТ!!!";
     }
     return "ДА";
 }
+
 /* ........................ <Вспомогательные функции 2> ...................... */
 void print_menu()
 {
@@ -364,7 +363,8 @@ void populate_array(int arr[], int size)
 void print_array(int arr[], int size, bool not_big)
 {
     //Не печатаем на экран массив слишком большого размера!
-    if(not_big && size > 150) return;
+    if (not_big && size > 150)
+        return;
 
     printf("[");
     for (int i = 0; i < size - 1; i++)
