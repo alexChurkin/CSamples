@@ -54,7 +54,7 @@ void reverseSegment(int arr[], int size) {
 }
 
 //Вывод массива на экран
-void printArray(int arr[], int size) {
+void print_array(int arr[], int size) {
     printf("[");
     for(int i = 0; i < size - 1; i++) {
         printf("%i ", arr[i]);
@@ -68,5 +68,5 @@ void main() {
     //При изменении массива важно менять и размер!
     int size = 8;
     reverseSegment(arr, size);
-    printArray(arr, size);
+    print_array(arr, size);
 }

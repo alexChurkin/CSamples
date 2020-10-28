@@ -6,7 +6,7 @@
 /*
 3. Сортировка пузырьком (стандартная)
 */
-void printArray(int arr[], int size) {
+void print_array(int arr[], int size) {
     printf("[");
     for(int i = 0; i < size - 1; i++) {
         printf("%i ", arr[i]);
@@ -66,7 +66,7 @@ void main() {
             scanf("%i", &pointer[i]);
 
         int* resultInfo = bubbleSort(pointer, size);
-        printArray(pointer, size);
+        print_array(pointer, size);
         printf("Сравнений: %i; обменов: %i\n\n", resultInfo[0], resultInfo[1]);
         free(pointer);
         free(resultInfo);

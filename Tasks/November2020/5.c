@@ -4,7 +4,7 @@
 #include <locale.h>
 
 /* 
-3.
+5. 
 */
 void main() {
     setlocale(LC_CTYPE, "rus");

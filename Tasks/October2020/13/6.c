@@ -27,7 +27,7 @@ void fillArray(int arr[], int size) {
     }
 }
 
-void printArray(int arr[], int size) {
+void print_array(int arr[], int size) {
     printf("[");
     for(int i = 0; i < size - 1; i++) {
         printf("%i ", arr[i]);
@@ -41,5 +41,5 @@ void main() {
 
     fillArray(arr, SIZE);
     printf("Массив стал таким:\n");
-    printArray(arr, SIZE);
+    print_array(arr, SIZE);
 }

@@ -50,7 +50,7 @@ void reverseSegment(int arr[], int size) {
     }
 }
 
-void printArray(int arr[], int size) {
+void print_array(int arr[], int size) {
     printf("[");
     for(int i = 0; i < size - 1; i++) {
         printf("%i ", arr[i]);
@@ -82,7 +82,7 @@ void main() {
             scanf("%i", &pointer[i]);
 
         reverseSegment(pointer, size);
-        printArray(pointer, size);
+        print_array(pointer, size);
         //Освобождаем память
         free(pointer);
     }
