@@ -1,8 +1,9 @@
 #include "D:\Projects\CVSCode\easyoutput.h"
 
-int main() {
+int main()
+{
     char string[] = "haaey";
-    strReverse(string);
+    str_reverse(string);
     println(string);
     return 0;
 }

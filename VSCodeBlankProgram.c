@@ -3,9 +3,9 @@
 #include <math.h>
 #include <locale.h>
 
-
 /* Заготовка для консольной программы на C В Visual Studio */
-void main() {
+void main()
+{
     setlocale(LC_CTYPE, "rus");
     //... Ваш код ...
 }

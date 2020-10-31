@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-int main() {
-
+int main()
+{
     int a;
-    a = a*3;
+    a = a * 3;
     //printf("a = %i\n", a);
     //float f = 1.23434354;
     //scanf_s("%f", &f);
