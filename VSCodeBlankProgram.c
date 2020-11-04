@@ -3,11 +3,13 @@
 #include <math.h>
 #include <locale.h>
 
-/* Заготовка для консольной программы на C В Visual Studio */
+/*
+Заготовка для консольной программы на C В Visual Studio
+*/
 void main()
 {
     setlocale(LC_CTYPE, "rus");
-    //... Ваш код ...
+    
 }
 //Для VS Code с расширением Code Runner и GCC (команда для компиляции кода на C):
 //cd $dir && gcc -finput-charset=UTF-8 -fexec-charset=cp1251 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt

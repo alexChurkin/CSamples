@@ -3,8 +3,8 @@
 #include <math.h>
 #include <locale.h>
 
-/* 
-4. 
+/*
+1. 
 */
 void main()
 {

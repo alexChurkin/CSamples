@@ -218,35 +218,35 @@ void demonstrate_all(int *arr, int *tmp_arr, int size)
     shaker_sort(arr, size, &comp_count, &swap_count);
     end = clock();
     printf("> Шейкерная:                     t = %f сек., корректность - %s, сравнений - %i, замен - %i\n",
-           ((end - begin) / 1000.0), is_sorted(arr, size), comp_count, swap_count);
+           ((float)(end - begin) / CLOCKS_PER_SEC), is_sorted(arr, size), comp_count, swap_count);
     recover_old_array(arr, tmp_arr, size);
 
     begin = clock();
     selection_sort(arr, size, &comp_count, &swap_count);
     end = clock();
     printf("> Выбором:                       t = %f сек., корректность - %s, сравнений - %i, замен - %i\n",
-           ((end - begin) / 1000.0), is_sorted(arr, size), comp_count, swap_count);
+           ((float)(end - begin) / CLOCKS_PER_SEC), is_sorted(arr, size), comp_count, swap_count);
     recover_old_array(arr, tmp_arr, size);
 
     begin = clock();
     insertion_sort(arr, size, &comp_count, &swap_count, 1);
     end = clock();
     printf("> Вставками 1 (с лин. поиском):  t = %f сек., корректность - %s, сравнений - %i, замен - %i\n",
-           ((end - begin) / 1000.0), is_sorted(arr, size), comp_count, swap_count);
+           ((float)(end - begin) / CLOCKS_PER_SEC), is_sorted(arr, size), comp_count, swap_count);
     recover_old_array(arr, tmp_arr, size);
 
     begin = clock();
     insertion_sort(arr, size, &comp_count, &swap_count, 2);
     end = clock();
     printf("> Вставками 2 (с бин. поиском):  t = %f сек., корректность - %s, сравнений - %i, замен - %i\n",
-           ((end - begin) / 1000.0), is_sorted(arr, size), comp_count, swap_count);
+           ((float)(end - begin) / CLOCKS_PER_SEC), is_sorted(arr, size), comp_count, swap_count);
     recover_old_array(arr, tmp_arr, size);
 
     begin = clock();
     counting_sort(arr, size);
     end = clock();
     printf("> Подсчётом:                     t = %f сек., корректность - %s\n",
-           ((end - begin) / 1000.0), is_sorted(arr, size), comp_count, swap_count);
+           ((float)(end - begin) / CLOCKS_PER_SEC), is_sorted(arr, size), comp_count, swap_count);
 }
 
 /* ........................  <Вспомогательные функции> ........................  */
