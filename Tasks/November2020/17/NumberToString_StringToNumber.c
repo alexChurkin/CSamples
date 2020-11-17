@@ -1,9 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <locale.h>
-#include <stdlib.h>
 
 /*
 4. Функции перевода целого числа в строку (и наоборот)
