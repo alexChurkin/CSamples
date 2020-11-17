@@ -5,11 +5,11 @@
 */
 void main()
 {
-    int n, res = -1;
+    int n, res;
     scanf("%i", &n);
 
     res = n % 10;
-    while (res != 0)
+    while (n > 0)
     {
         printf("%i\n", res);
         n /= 10;
