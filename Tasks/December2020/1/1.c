@@ -6,7 +6,7 @@
 #include <locale.h>
 
 /*
-1. Экспонента в точке 1 (правильная и неправильная)
+1. Экспонента (правильная и неправильная)
 */
 
 int my_factorial(int n)
@@ -20,7 +20,7 @@ int my_factorial(int n)
 
 double my_pow(double x, int m)
 {
-    int result = 1;
+    double result = 1;
     for (int i = 1; i <= m; i++)
         result *= x;
     return result;
