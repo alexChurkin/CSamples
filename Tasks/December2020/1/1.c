@@ -6,7 +6,7 @@
 #include <locale.h>
 
 /*
-1. Экспонента (правильная и неправильная)
+1. Экспонента по формуле Тейлора (правильная и неправильная)
 */
 
 int my_factorial(int n)
@@ -57,7 +57,8 @@ double my_exp(double x, int n)
 void main()
 {
     setlocale(LC_CTYPE, "rus");
-    double x, n;
+    double x;
+    int n;
     printf("В какой точке?\n");
     scanf("%lf", &x);
     printf("Сколько слагаемых?\n");
