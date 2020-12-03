@@ -6,14 +6,16 @@
 #include <locale.h>
 
 /*
-3. Приближённый косинус по формуле Тейлора
+3. Приближённый косинус по формуле Тейлора (переполнение double при больших x)
 */
-double my_cos(double x, int n) {
+double my_cos(double x, int n)
+{
     int sign = 1;
     double a = 1;
     double result = 0;
     int i;
-    for(i = 1; i <= n; i++) {
+    for (i = 1; i <= n; i++)
+    {
         result += sign * a;
         a *= (x / (2 * i - 1)) * (x / (2 * i));
         sign = -sign;

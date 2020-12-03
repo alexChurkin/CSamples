@@ -18,7 +18,7 @@ double my_sin(double x, int n)
     for (i = 1, j = 1; i <= n; i++, j += 2)
     {
         result += sign * a;
-        sign = - sign;
+        sign = -sign;
         a *= (x / (j + 1)) * (x / (j + 2));
     }
     return result;
@@ -33,7 +33,7 @@ void main()
     scanf("%lf", &x);
     printf("Сколько слагаемых?\n");
     scanf("%i", &n);
-    
+
     double s = sin(x);
     double my_s = my_sin(x, n);
 
