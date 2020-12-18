@@ -37,7 +37,7 @@ int *create_empty_array(int size)
 /*......<Крутейшее получение массива с клавиатуры или рандомно>......*/
 void populate_array(int arr[], int size)
 {
-    if (size <= 6)
+    if (size <= 15)
     {
         printf("Введите %i чисел\n", size);
         for (int i = 0; i < size; i++)
@@ -105,7 +105,7 @@ void main()
 {
     setlocale(LC_CTYPE, "rus");
     int n;
-    double *array = get_array(&n);
+    int *array = get_array(&n);
     indices ind = min_distance_indices(array, n);
     printf("%i %i", ind.k1, ind.k2);
 }
