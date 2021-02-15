@@ -27,10 +27,10 @@ int main()
     double matrix[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
     double vect[3] = {4, 5, 6};
 
-    double* result = matrix_on_vector(matrix, vect, 3);
-    for (int i = 0; i < 3; i++)
-    {
+    //double* result = matrix_on_vector(matrix, vect, 3);
+    //for (int i = 0; i < 3; i++)
+    //{
 
-    }
+    //}
     return 0;
 }

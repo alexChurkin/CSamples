@@ -3,7 +3,6 @@
 #include <time.h>
 using namespace std;
 
-//Функция вывода матрицы на экран
 void print_matrix(double **matrix, int m, int n)
 {
     for (int i = 0; i < m; i++)
@@ -17,7 +16,6 @@ void print_matrix(double **matrix, int m, int n)
     }
 }
 
-//Функция создания матрицы
 double **make_matrix(int m, int n)
 {
     double **matrix = new double *[m];
@@ -26,23 +24,19 @@ double **make_matrix(int m, int n)
     return matrix;
 }
 
-//Функция заполнения матрицы
 void fill_matrix(double **matrix, int m, int n)
 {
     int count = m * n;
-    //Считываем с клавиатуры
+
     if (count <= 9)
     {
-        cout << "Введите " << m * n << "чисел матрицы:\n";
+        cout << "Введите " << m * n << " элементов матрицы:\n";
         for (int i = 0; i < m; i++)
             for (int j = 0; j < n; j++)
                 cin >> matrix[i][j];
-        //УБРАТЬ
-        print_matrix(matrix, m, n);
         return;
     }
 
-    //Генерируем случайно
     cout << "Матрица будет заполена автоматически.\n";
     srand((unsigned int)time(NULL));
     int range_min, range_max;
@@ -64,13 +58,50 @@ void fill_matrix(double **matrix, int m, int n)
     print_matrix(matrix, m, n);
 }
 
+void destroy_matrix(double **matrix, int m, int n)
+{
+    for (int i = 0; i < m; i++)
+        delete[] matrix[i];
+    delete[] matrix;
+}
+
+/* .................................................. */
+
+//Минимальный
+double find_min(double **matrix, int m, int n)
+{
+    double min = matrix[0][0];
+    for (int i = 0; i < m; i++)
+        for (int j = 1; j < n; j++)
+        {
+            if(matrix[i][j] < min) min = matrix[i][j];
+        }
+    return min;
+}
+
+//Максимальный
+double find_max(double **matrix, int m, int n)
+{
+    double max = matrix[0][0];
+    for (int i = 0; i < m; i++)
+        for (int j = 1; j < n; j++)
+        {
+            if(matrix[i][j] > max) max = matrix[i][j];
+        }
+    return max;
+}
+
 int main()
 {
     setlocale(LC_ALL, "russian");
-    double matrix[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    double vect[3] = {4, 5, 6};
+    
+    int m = 5, n = 5;
+    double **matr = make_matrix(m, n);
+    fill_matrix(matr, m, n);
 
-    double **matr = make_matrix(4, 4);
-    fill_matrix(matr, 4, 4);
+    cout << "Минимальный элемент: " << find_min(matr, m, n) << '\n';
+    cout << "Максимальный элемент: " << find_max(matr, m, n) << '\n';
+
+    destroy_matrix(matr, m, n);
     return 0;
 }
