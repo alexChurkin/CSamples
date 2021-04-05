@@ -2,6 +2,7 @@
 #include <fstream>
 #include <clocale>
 #include <ctime>
+#include <string>
 using namespace std;
 
 /*
