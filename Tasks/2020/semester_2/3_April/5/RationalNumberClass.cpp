@@ -112,6 +112,7 @@ Rational::Rational(int m, unsigned int n)
 void Rational::setM(int m)
 {
     this->m = m;
+    gcd_optimize();
 }
 
 int Rational::getM()
@@ -122,6 +123,7 @@ int Rational::getM()
 void Rational::setN(unsigned int n)
 {
     this->n = n;
+    gcd_optimize();
 }
 
 unsigned int Rational::getN()
