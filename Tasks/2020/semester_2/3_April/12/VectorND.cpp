@@ -22,29 +22,87 @@ public:
     //Деструктор
     ~Vector();
 
-    //Сложение
-    Vector operator+(double b);
     Vector operator+(const Vector &b);
-    //Вычитание
-    Vector operator-(double b);
     Vector operator-(const Vector &b);
-    //Умножение на число
-    Vector operator*(double b);
-    //Скалярное произведение
     double operator*(const Vector &b);
+
+    Vector operator+(double b);
+    Vector operator-(double b);
+    Vector operator*(double b);
+    Vector operator/(double b);
+
+    //Операторы присваивания
+    Vector &operator=(const Vector &b);
+    Vector &operator+=(const Vector &b);
+    Vector &operator-=(const Vector &b);
+
+    Vector &operator+=(double b);
+    Vector &operator-=(double b);
+    Vector &operator*=(double b);
+    Vector &operator/=(double b);
 
     //Получение i-й компоненты для чтения/записи (set/get)
     double &operator[](int i);
 
-    friend ostream &operator<<(ostream &os, Vector v)
+    //c+v
+    friend Vector operator+(double a, const Vector &b)
+    {
+        Vector c(b);
+        for (int i = 0; i < c.n; i++)
+        {
+            c.arr[i] += a;
+        }
+        //После этого вызывается конструктор копирования в вызывающей
+        //функции
+        return c;
+    }
+
+    //c-v
+    friend Vector operator-(double a, const Vector &b)
+    {
+        Vector c(b);
+        for (int i = 0; i < c.n; i++)
+        {
+            c.arr[i] = a - c.arr[i];
+        }
+        //После этого вызывается конструктор копирования в вызывающей
+        //функции
+        return c;
+    }
+
+    //c*v
+    friend Vector operator*(double a, const Vector &b)
+    {
+        Vector c(b);
+        for (int i = 0; i < c.n; i++)
+        {
+            c.arr[i] = a * c.arr[i];
+        }
+        //После этого вызывается конструктор копирования в вызывающей
+        //функции
+        return c;
+    }
+
+    //Вывод на экран
+    friend ostream &operator<<(ostream &os, const Vector &v)
     {
         os << '(';
         for (int i = 0; i < v.n - 1; i++)
         {
-            os << v[i] << ", ";
+            os << v.arr[i] << ", ";
         }
-        os << v[v.n - 1] << ')';
+        os << v.arr[v.n - 1] << ')';
         return os;
+    }
+
+    //Ввод с клавиатуры
+    friend istream &operator>>(istream &is, Vector &v)
+    {
+        for (int i = 0; i < v.n; i++)
+        {
+            is >> v.arr[i];
+        }
+        return is;
     }
 };
 
@@ -72,6 +130,32 @@ Vector::~Vector()
     delete[] arr;
 }
 
+//Блок 1 --------------------------------
+Vector Vector::operator+(const Vector &b)
+{
+    Vector res(n);
+    for (int i = 0; i < n; i++)
+        res[i] = arr[i] + b.arr[i];
+    return res;
+}
+
+Vector Vector::operator-(const Vector &b)
+{
+    Vector res(n);
+    for (int i = 0; i < n; i++)
+        res[i] = arr[i] - b.arr[i];
+    return res;
+}
+
+double Vector::operator*(const Vector &b)
+{
+    double sum = 0;
+    for (int i = 0; i < n; i++)
+        sum += arr[i] * b.arr[i];
+    return sum;
+}
+
+//Блок 2 --------------------------------
 Vector Vector::operator+(double b)
 {
     Vector res(n);
@@ -85,29 +169,11 @@ Vector Vector::operator+(double b)
     return res;
 }
 
-//const-ссылка нужна, чтобы обезопасить себя от изменения полей b внутри
-//данной функции!
-Vector Vector::operator+(const Vector &b)
-{
-    Vector res(n);
-    for (int i = 0; i < n; i++)
-        res[i] = arr[i] + b.arr[i];
-    return res;
-}
-
 Vector Vector::operator-(double b)
 {
     Vector res(n);
     for (int i = 0; i < n; i++)
         res[i] = (*this)[i] - b;
-    return res;
-}
-
-Vector Vector::operator-(const Vector &b)
-{
-    Vector res(n);
-    for (int i = 0; i < n; i++)
-        res[i] = arr[i] - b.arr[i];
     return res;
 }
 
@@ -119,45 +185,176 @@ Vector Vector::operator*(double b)
     return res;
 }
 
-double Vector::operator*(const Vector &b)
+Vector Vector::operator/(double b)
 {
-    double sum = 0;
+    Vector res(n);
     for (int i = 0; i < n; i++)
-        sum += arr[i] * b.arr[i];
-    return sum;
+        res.arr[i] = arr[i] / b;
+    return res;
+}
+
+//Блок 3 --------------------------------
+//Возврат вектора со ссылкой позволяет избежать ошибок с (x = y) = b
+Vector &Vector::operator=(const Vector &v)
+{
+    //Проверка на то, происходит ли присваивание объекта самому себе
+    if (this == &v)
+        return *this;
+
+    //Если у текущего вектора размер не совпадает с v,
+    //то необходимо обновить размер текущего вектора
+    //в соответствии с переданным
+    if (n != v.n)
+    {
+        n = v.n;
+        delete[] arr;
+        arr = new double[n];
+    }
+    //Далее просто присвоим (скопируем) значения
+    for (int i = 0; i < n; i++)
+        arr[i] = v.arr[i];
+
+    return *this;
+}
+
+//Векторы только одинаковой длины
+Vector &Vector::operator+=(const Vector &v)
+{
+    //Если у текущего вектора размер не совпадает с v,
+    //то мы не можем сложить
+    if (n != v.n)
+    {
+        throw "Векторы имеют разные размерности";
+    }
+
+    //Далее просто присвоим (скопируем) значения
+    for (int i = 0; i < n; i++)
+        arr[i] += v.arr[i];
+
+    return *this;
+}
+
+Vector &Vector::operator-=(const Vector &v)
+{
+    if (n != v.n)
+    {
+        throw "Векторы имеют разные размерности";
+    }
+
+    for (int i = 0; i < n; i++)
+        arr[i] -= v.arr[i];
+
+    return *this;
+}
+
+//Блок 4 --------------------------------
+Vector &Vector::operator+=(double b)
+{
+    for (int i = 0; i < n; i++)
+        arr[i] += b;
+
+    return *this;
+}
+
+Vector &Vector::operator-=(double b)
+{
+    for (int i = 0; i < n; i++)
+        arr[i] -= b;
+
+    return *this;
+}
+
+Vector &Vector::operator*=(double b)
+{
+    for (int i = 0; i < n; i++)
+        arr[i] *= b;
+
+    return *this;
+}
+
+Vector &Vector::operator/=(double b)
+{
+    for (int i = 0; i < n; i++)
+        arr[i] /= b;
+
+    return *this;
 }
 
 double &Vector::operator[](int i)
 {
-    return arr[i];
+    if (i > 0 && i < n)
+        return arr[i];
+    else
+        throw "Index out of bounds exception";
 }
 
 /* ........................ */
 int main()
 {
     setlocale(LC_ALL, "russian");
-    Vector c(3);
-    Vector d(3);
-    c[0] = 1;
-    c[1] = 2;
-    c[2] = 3;
-    d[0] = d[1] = d[2] = 5;
+    //с = (1, 2, 3)
+    //d = (5, 5, 5)
+    Vector v1(3);
+    Vector v2(3);
+    v1[0] = 1;
+    v1[1] = 2;
+    v1[2] = 3;
+    v2[0] = v2[1] = v2[2] = 5;
 
     cout << "Дано:\n";
-    cout << "c = " << c << "\n";
-    cout << "d = " << d << "\n\n";
+    cout << "v1 = " << v1 << "\n";
+    cout << "v2 = " << v2 << "\n\n";
 
-    Vector k1 = c + 2;
-    cout << "c + 2 = " << k1 << '\n';
+    //////////////////////////////////////
+    Vector test1 = v1 + v2;
+    cout << "v1 + v2 = " << test1 << '\n';
 
-    Vector k2 = c - 2;
-    cout << "c - 2 = " << k2 << '\n';
+    Vector test2 = v1 - v2;
+    cout << "v1 - v2 = " << test2 << '\n';
 
-    Vector k3 = c * 10;
-    cout << "c * 10 = " << k3 << '\n';
+    double test3 = v1 * v2;
+    cout << "v1 * v2 = " << test3 << '\n';
+    //////////////////////////////////////
+    Vector test4 = v1 + 1;
+    cout << "v1 + 1 = " << v1 + 1 << '\n';
 
-    int k4 = c * d;
-    cout << "c * d = " << k4 << '\n';
+    Vector test5 = v1 - 1;
+    cout << "v1 - 1 = " << v1 - 1 << '\n';
 
+    Vector test6 = v1 * 2;
+    cout << "v1 * 2 = " << v1 * 2 << '\n';
+
+    Vector test7 = v1 / 2;
+    cout << "v1 / 2 = " << v1 / 2 << '\n';
+    //////////////////////////////////////
+    Vector test8 = v1;
+    cout << "Присваивание: test8 = v1          || = " << test8 << '\n';
+
+    Vector test9 = (v1 += v2);
+    cout << "Присваивание: test9 = (v1 += v2)  || = " << test9 << '\n';
+
+    Vector test10 = (v1 -= v2);
+    cout << "Присваивание: test10 = (v1 -= v2) || = " << test10 << '\n';
+    //////////////////////////////////////
+    Vector test11 = (v1 += 2);
+    cout << "Присваивание: test11 = (v1 += 2)  || = " << test11 << '\n';
+
+    Vector test12 = (v1 -= 2);
+    cout << "Присваивание: test12 = (v1 -= 2)  || = " << test12 << '\n';
+
+    Vector test13 = (v1 *= 2);
+    cout << "Присваивание: test13 = (v1 *= 2)  || = " << test13 << '\n';
+
+    Vector test14 = (v1 /= 2);
+    cout << "Присваивание: test14 = (v1 /= 2)  || = " << test14 << '\n';
+
+    Vector test15 = 1 + v1;
+    cout << "1 + v1 = " << test15 << '\n';
+
+    Vector test16 = 1 - v1;
+    cout << "1 + v1 = " << test16 << '\n';
+
+    Vector test17 = 2 * v1;
+    cout << "2 * v1 = " << test17 << '\n';
     return 0;
 }

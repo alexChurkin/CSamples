@@ -79,6 +79,7 @@ public:
 
         r.m = stod(str.substr(0, slash_pos));
         r.n = stod(str.substr(slash_pos + 1, str.size() - 1));
+        r.gcd_optimize();
         return is;
     }
 };
