@@ -12,19 +12,19 @@ class Vector
 {
 private:
     int n;
-    double *arr;
+    double* arr;
 
 public:
     //Конструктор обычный
     Vector(int _n = 3);
     //Конструктор копирования
-    Vector(const Vector &v);
+    Vector(const Vector& v);
     //Деструктор
     ~Vector();
 
-    Vector operator+(const Vector &b);
-    Vector operator-(const Vector &b);
-    double operator*(const Vector &b);
+    Vector operator+(const Vector& b);
+    Vector operator-(const Vector& b);
+    double operator*(const Vector& b);
 
     Vector operator+(double b);
     Vector operator-(double b);
@@ -32,20 +32,20 @@ public:
     Vector operator/(double b);
 
     //Операторы присваивания
-    Vector &operator=(const Vector &b);
-    Vector &operator+=(const Vector &b);
-    Vector &operator-=(const Vector &b);
+    Vector& operator=(const Vector& b);
+    Vector& operator+=(const Vector& b);
+    Vector& operator-=(const Vector& b);
 
-    Vector &operator+=(double b);
-    Vector &operator-=(double b);
-    Vector &operator*=(double b);
-    Vector &operator/=(double b);
+    Vector& operator+=(double b);
+    Vector& operator-=(double b);
+    Vector& operator*=(double b);
+    Vector& operator/=(double b);
 
     //Получение i-й компоненты для чтения/записи (set/get)
-    double &operator[](int i);
+    double& operator[](int i);
 
     //c+v
-    friend Vector operator+(double a, const Vector &b)
+    friend Vector operator+(double a, const Vector& b)
     {
         Vector c(b);
         for (int i = 0; i < c.n; i++)
@@ -58,33 +58,29 @@ public:
     }
 
     //c-v
-    friend Vector operator-(double a, const Vector &b)
+    friend Vector operator-(double a, const Vector& b)
     {
         Vector c(b);
         for (int i = 0; i < c.n; i++)
         {
             c.arr[i] = a - c.arr[i];
         }
-        //После этого вызывается конструктор копирования в вызывающей
-        //функции
         return c;
     }
 
     //c*v
-    friend Vector operator*(double a, const Vector &b)
+    friend Vector operator*(double a, const Vector& b)
     {
         Vector c(b);
         for (int i = 0; i < c.n; i++)
         {
             c.arr[i] = a * c.arr[i];
         }
-        //После этого вызывается конструктор копирования в вызывающей
-        //функции
         return c;
     }
 
     //Вывод на экран
-    friend ostream &operator<<(ostream &os, const Vector &v)
+    friend ostream& operator<<(ostream& os, const Vector& v)
     {
         os << '(';
         for (int i = 0; i < v.n - 1; i++)
@@ -96,7 +92,7 @@ public:
     }
 
     //Ввод с клавиатуры
-    friend istream &operator>>(istream &is, Vector &v)
+    friend istream& operator>>(istream& is, Vector& v)
     {
         for (int i = 0; i < v.n; i++)
         {
@@ -117,7 +113,9 @@ Vector::Vector(int _n)
 //В конструктор копирования передаётся ссылка!
 //Иначе будет вызов функции копирования со срабатыванием
 //КОНСТРУКТОРА КОПИРОВАНИЯ!!! (БЕСКОНЕЧНЫЙ ЦИКЛ)
-Vector::Vector(const Vector &v)
+//(ссылка является константной для того, чтобы
+//случайно не изменить объект)
+Vector::Vector(const Vector& v)
 {
     n = v.n;
     arr = new double[v.n];
@@ -131,7 +129,7 @@ Vector::~Vector()
 }
 
 //Блок 1 --------------------------------
-Vector Vector::operator+(const Vector &b)
+Vector Vector::operator+(const Vector& b)
 {
     Vector res(n);
     for (int i = 0; i < n; i++)
@@ -139,7 +137,7 @@ Vector Vector::operator+(const Vector &b)
     return res;
 }
 
-Vector Vector::operator-(const Vector &b)
+Vector Vector::operator-(const Vector& b)
 {
     Vector res(n);
     for (int i = 0; i < n; i++)
@@ -147,7 +145,7 @@ Vector Vector::operator-(const Vector &b)
     return res;
 }
 
-double Vector::operator*(const Vector &b)
+double Vector::operator*(const Vector& b)
 {
     double sum = 0;
     for (int i = 0; i < n; i++)
@@ -161,11 +159,15 @@ Vector Vector::operator+(double b)
     Vector res(n);
     for (int i = 0; i < n; i++)
         res[i] = (*this)[i] + b;
-    //c.arr[i] = arr[i] + b;
     //СОЗДАЁТСЯ КОПИЯ ДАННОЙ ПЕРЕМЕННОЙ С ТЕМ ЖЕ ЗНАЧЕНИЕМ,
     //ЗАТЕМ ПЕРЕДАЁТСЯ В ГЛАВНУЮ ПРОГРАММУ! ДЛЯ ЭТОГО ОБЯЗАТЕЛЬНО
     //НУЖНО ПЕРЕОПРЕДЕЛЯТЬ КОНСТРУКТОР КОПИРОВАНИЯ (ЕСЛИ В КЛАССЕ ЕСТЬ
     //ДИНАМИЕЧЕСКИЕ ПОЛЯ)
+    //Т.к. иначе деструктор уничтожит память под динамические поля,
+    //А в скопированном объекте останется ссылка на них.
+    //Стандартно при присваивании происходит побитовое копирование
+    //полей, то есть стандартно просто скопируется ссылка,
+    //А память уже очистится после завершения этого метода.
     return res;
 }
 
@@ -195,7 +197,7 @@ Vector Vector::operator/(double b)
 
 //Блок 3 --------------------------------
 //Возврат вектора со ссылкой позволяет избежать ошибок с (x = y) = b
-Vector &Vector::operator=(const Vector &v)
+Vector& Vector::operator=(const Vector& v)
 {
     //Проверка на то, происходит ли присваивание объекта самому себе
     if (this == &v)
@@ -218,13 +220,13 @@ Vector &Vector::operator=(const Vector &v)
 }
 
 //Векторы только одинаковой длины
-Vector &Vector::operator+=(const Vector &v)
+Vector& Vector::operator+=(const Vector& v)
 {
     //Если у текущего вектора размер не совпадает с v,
     //то мы не можем сложить
     if (n != v.n)
     {
-        throw "Векторы имеют разные размерности";
+        throw "Vectors have different dimensions";
     }
 
     //Далее просто присвоим (скопируем) значения
@@ -234,11 +236,11 @@ Vector &Vector::operator+=(const Vector &v)
     return *this;
 }
 
-Vector &Vector::operator-=(const Vector &v)
+Vector& Vector::operator-=(const Vector& v)
 {
     if (n != v.n)
     {
-        throw "Векторы имеют разные размерности";
+        throw "Vectors have different dimensions";
     }
 
     for (int i = 0; i < n; i++)
@@ -248,7 +250,7 @@ Vector &Vector::operator-=(const Vector &v)
 }
 
 //Блок 4 --------------------------------
-Vector &Vector::operator+=(double b)
+Vector& Vector::operator+=(double b)
 {
     for (int i = 0; i < n; i++)
         arr[i] += b;
@@ -256,7 +258,7 @@ Vector &Vector::operator+=(double b)
     return *this;
 }
 
-Vector &Vector::operator-=(double b)
+Vector& Vector::operator-=(double b)
 {
     for (int i = 0; i < n; i++)
         arr[i] -= b;
@@ -264,7 +266,7 @@ Vector &Vector::operator-=(double b)
     return *this;
 }
 
-Vector &Vector::operator*=(double b)
+Vector& Vector::operator*=(double b)
 {
     for (int i = 0; i < n; i++)
         arr[i] *= b;
@@ -272,7 +274,7 @@ Vector &Vector::operator*=(double b)
     return *this;
 }
 
-Vector &Vector::operator/=(double b)
+Vector& Vector::operator/=(double b)
 {
     for (int i = 0; i < n; i++)
         arr[i] /= b;
@@ -280,9 +282,9 @@ Vector &Vector::operator/=(double b)
     return *this;
 }
 
-double &Vector::operator[](int i)
+double& Vector::operator[](int i)
 {
-    if (i > 0 && i < n)
+    if (i >= 0 && i < n)
         return arr[i];
     else
         throw "Index out of bounds exception";
@@ -302,8 +304,10 @@ int main()
     v2[0] = v2[1] = v2[2] = 5;
 
     cout << "Дано:\n";
+    cout << "========================\n";
     cout << "v1 = " << v1 << "\n";
-    cout << "v2 = " << v2 << "\n\n";
+    cout << "v2 = " << v2 << "\n";
+    cout << "========================\n\n";
 
     //////////////////////////////////////
     Vector test1 = v1 + v2;
@@ -328,31 +332,31 @@ int main()
     cout << "v1 / 2 = " << v1 / 2 << '\n';
     //////////////////////////////////////
     Vector test8 = v1;
-    cout << "Присваивание: test8 = v1          || = " << test8 << '\n';
+    cout << "test8  = v1          || = " << test8 << '\n';
 
     Vector test9 = (v1 += v2);
-    cout << "Присваивание: test9 = (v1 += v2)  || = " << test9 << '\n';
+    cout << "test9  = (v1 += v2)  || = " << test9 << '\n';
 
     Vector test10 = (v1 -= v2);
-    cout << "Присваивание: test10 = (v1 -= v2) || = " << test10 << '\n';
+    cout << "test10 = (v1 -= v2)  || = " << test10 << '\n';
     //////////////////////////////////////
     Vector test11 = (v1 += 2);
-    cout << "Присваивание: test11 = (v1 += 2)  || = " << test11 << '\n';
+    cout << "test11 = (v1 += 2)   || = " << test11 << '\n';
 
     Vector test12 = (v1 -= 2);
-    cout << "Присваивание: test12 = (v1 -= 2)  || = " << test12 << '\n';
+    cout << "test12 = (v1 -= 2)   || = " << test12 << '\n';
 
     Vector test13 = (v1 *= 2);
-    cout << "Присваивание: test13 = (v1 *= 2)  || = " << test13 << '\n';
+    cout << "test13 = (v1 *= 2)   || = " << test13 << '\n';
 
     Vector test14 = (v1 /= 2);
-    cout << "Присваивание: test14 = (v1 /= 2)  || = " << test14 << '\n';
+    cout << "test14 = (v1 /= 2)   || = " << test14 << '\n';
 
     Vector test15 = 1 + v1;
     cout << "1 + v1 = " << test15 << '\n';
 
     Vector test16 = 1 - v1;
-    cout << "1 + v1 = " << test16 << '\n';
+    cout << "1 - v1 = " << test16 << '\n';
 
     Vector test17 = 2 * v1;
     cout << "2 * v1 = " << test17 << '\n';
