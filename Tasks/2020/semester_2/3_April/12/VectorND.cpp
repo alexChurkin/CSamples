@@ -22,6 +22,8 @@ public:
     //Деструктор
     ~Vector();
 
+    void resize(int _n);
+
     Vector operator+(const Vector &b);
     Vector operator-(const Vector &b);
     double operator*(const Vector &b);
@@ -45,61 +47,15 @@ public:
     double &operator[](int i);
 
     //c+v
-    friend Vector operator+(double a, const Vector &b)
-    {
-        Vector c(b);
-        for (int i = 0; i < c.n; i++)
-        {
-            c.arr[i] += a;
-        }
-        //После этого вызывается конструктор копирования в вызывающей
-        //функции
-        return c;
-    }
-
+    friend Vector operator+(double a, const Vector &b);
     //c-v
-    friend Vector operator-(double a, const Vector &b)
-    {
-        Vector c(b);
-        for (int i = 0; i < c.n; i++)
-        {
-            c.arr[i] = a - c.arr[i];
-        }
-        return c;
-    }
-
+    friend Vector operator-(double a, const Vector &b);
     //c*v
-    friend Vector operator*(double a, const Vector &b)
-    {
-        Vector c(b);
-        for (int i = 0; i < c.n; i++)
-        {
-            c.arr[i] = a * c.arr[i];
-        }
-        return c;
-    }
-
+    friend Vector operator*(double a, const Vector &b);
     //Вывод на экран
-    friend ostream &operator<<(ostream &os, const Vector &v)
-    {
-        os << '(';
-        for (int i = 0; i < v.n - 1; i++)
-        {
-            os << v.arr[i] << ", ";
-        }
-        os << v.arr[v.n - 1] << ')';
-        return os;
-    }
-
+    friend ostream &operator<<(ostream &os, const Vector &v);
     //Ввод с клавиатуры
-    friend istream &operator>>(istream &is, Vector &v)
-    {
-        for (int i = 0; i < v.n; i++)
-        {
-            is >> v.arr[i];
-        }
-        return is;
-    }
+    friend istream &operator>>(istream &is, Vector &v);
 };
 
 /* ........................ */
@@ -111,6 +67,8 @@ Vector::Vector(int _n)
 
     n = _n;
     arr = new double[_n];
+    for (int i = 0; i < n; i++)
+        arr[i] = 0;
 }
 
 //В конструктор копирования передаётся ссылка!
@@ -129,6 +87,29 @@ Vector::Vector(const Vector &v)
 Vector::~Vector()
 {
     delete[] arr;
+}
+
+void Vector::resize(int _n)
+{
+    if (_n == n)
+        return;
+
+    double *arr_new = new double[_n];
+    for (int i = 0; i < _n; i++)
+        arr_new[i] = 0;
+
+    //Новый размер больше старого (просто копируем значения)
+    if (_n > n)
+        for (int i = 0; i < n; i++)
+            arr_new[i] = arr[i];
+    //Новый меньше старого (копируем значения, которые уберутся)
+    else
+        for (int i = 0; i < _n; i++)
+            arr_new[i] = arr[i];
+
+    delete[] arr;
+    arr = arr_new;
+    n = _n;
 }
 
 //Блок 1 --------------------------------
@@ -313,12 +294,64 @@ double &Vector::operator[](int i)
         throw "Index out of bounds exception";
 }
 
+Vector operator+(double a, const Vector &b)
+{
+    Vector c(b);
+    for (int i = 0; i < c.n; i++)
+    {
+        c.arr[i] += a;
+    }
+    //После этого вызывается конструктор копирования в вызывающей
+    //функции
+    return c;
+}
+
+Vector operator-(double a, const Vector &b)
+{
+    Vector c(b);
+    for (int i = 0; i < c.n; i++)
+    {
+        c.arr[i] = a - c.arr[i];
+    }
+    return c;
+}
+
+Vector operator*(double a, const Vector &b)
+{
+    Vector c(b);
+    for (int i = 0; i < c.n; i++)
+    {
+        c.arr[i] = a * c.arr[i];
+    }
+    return c;
+}
+
+ostream &operator<<(ostream &os, const Vector &v)
+{
+    os << '(';
+    for (int i = 0; i < v.n - 1; i++)
+    {
+        os << v.arr[i] << ", ";
+    }
+    os << v.arr[v.n - 1] << ')';
+    return os;
+}
+
+istream &operator>>(istream &is, Vector &v)
+{
+    for (int i = 0; i < v.n; i++)
+    {
+        is >> v.arr[i];
+    }
+    return is;
+}
+
 /* ........................ */
 int main()
 {
     setlocale(LC_ALL, "russian");
-    //с = (1, 2, 3)
-    //d = (5, 5, 5)
+    //v1 = (1, 2, 3)
+    //v2 = (5, 5, 5)
     Vector v1(3);
     Vector v2(3);
     v1[0] = 1;
@@ -382,9 +415,22 @@ int main()
     cout << "1 - v1 = " << test16 << '\n';
 
     Vector test17 = 2 * v1;
-    cout << "2 * v1 = " << test17 << '\n';
+    cout << "2 * v1 = " << test17 << "\n\n";
 
-    //Демонстрация ловли исключения
+    Vector test18(5);
+    test18[0] = 10;
+    test18[1] = 20;
+    test18[2] = 30;
+    test18[3] = 40;
+    test18[4] = 50;
+    cout << "Создан вектор            test18 = " << test18 << '\n';
+    test18.resize(8);
+    cout << "Изменён его размер на 8: test18 = " << test18 << '\n';
+    test18.resize(3);
+    cout << "Изменён его размер на 3: test18 = " << test18 << "\n\n";
+
+    //........Демонстрация ловли исключений........
+    //Некорректное обращение []
     try
     {
         double a = test17[10];
@@ -394,6 +440,7 @@ int main()
         cout << "Произошла ошибка: " << str << '\n';
     }
 
+    //Некорректная сумма
     Vector t1(3);
     Vector t2(4);
     try
@@ -404,10 +451,15 @@ int main()
     {
         cout << "Произошла ошибка: " << str << '\n';
     }
-    catch (...)
-    {
-        cout << "Совсем странные дела (-_-)" << '\n';
-    }
 
+    //Некорректное создание вектора
+    try
+    {
+        Vector t4(-15);
+    }
+    catch (const char *str)
+    {
+        cout << "Произошла ошибка: " << str << '\n';
+    }
     return 0;
 }
