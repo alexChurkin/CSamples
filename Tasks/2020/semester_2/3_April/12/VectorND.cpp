@@ -12,19 +12,19 @@ class Vector
 {
 private:
     int n;
-    double* arr;
+    double *arr;
 
 public:
     //Конструктор обычный
     Vector(int _n = 3);
     //Конструктор копирования
-    Vector(const Vector& v);
+    Vector(const Vector &v);
     //Деструктор
     ~Vector();
 
-    Vector operator+(const Vector& b);
-    Vector operator-(const Vector& b);
-    double operator*(const Vector& b);
+    Vector operator+(const Vector &b);
+    Vector operator-(const Vector &b);
+    double operator*(const Vector &b);
 
     Vector operator+(double b);
     Vector operator-(double b);
@@ -32,20 +32,20 @@ public:
     Vector operator/(double b);
 
     //Операторы присваивания
-    Vector& operator=(const Vector& b);
-    Vector& operator+=(const Vector& b);
-    Vector& operator-=(const Vector& b);
+    Vector &operator=(const Vector &b);
+    Vector &operator+=(const Vector &b);
+    Vector &operator-=(const Vector &b);
 
-    Vector& operator+=(double b);
-    Vector& operator-=(double b);
-    Vector& operator*=(double b);
-    Vector& operator/=(double b);
+    Vector &operator+=(double b);
+    Vector &operator-=(double b);
+    Vector &operator*=(double b);
+    Vector &operator/=(double b);
 
     //Получение i-й компоненты для чтения/записи (set/get)
-    double& operator[](int i);
+    double &operator[](int i);
 
     //c+v
-    friend Vector operator+(double a, const Vector& b)
+    friend Vector operator+(double a, const Vector &b)
     {
         Vector c(b);
         for (int i = 0; i < c.n; i++)
@@ -58,7 +58,7 @@ public:
     }
 
     //c-v
-    friend Vector operator-(double a, const Vector& b)
+    friend Vector operator-(double a, const Vector &b)
     {
         Vector c(b);
         for (int i = 0; i < c.n; i++)
@@ -69,7 +69,7 @@ public:
     }
 
     //c*v
-    friend Vector operator*(double a, const Vector& b)
+    friend Vector operator*(double a, const Vector &b)
     {
         Vector c(b);
         for (int i = 0; i < c.n; i++)
@@ -80,7 +80,7 @@ public:
     }
 
     //Вывод на экран
-    friend ostream& operator<<(ostream& os, const Vector& v)
+    friend ostream &operator<<(ostream &os, const Vector &v)
     {
         os << '(';
         for (int i = 0; i < v.n - 1; i++)
@@ -92,7 +92,7 @@ public:
     }
 
     //Ввод с клавиатуры
-    friend istream& operator>>(istream& is, Vector& v)
+    friend istream &operator>>(istream &is, Vector &v)
     {
         for (int i = 0; i < v.n; i++)
         {
@@ -106,6 +106,9 @@ public:
 
 Vector::Vector(int _n)
 {
+    if (_n <= 0)
+        throw "Vector size cannot be <= 0";
+
     n = _n;
     arr = new double[_n];
 }
@@ -115,7 +118,7 @@ Vector::Vector(int _n)
 //КОНСТРУКТОРА КОПИРОВАНИЯ!!! (БЕСКОНЕЧНЫЙ ЦИКЛ)
 //(ссылка является константной для того, чтобы
 //случайно не изменить объект)
-Vector::Vector(const Vector& v)
+Vector::Vector(const Vector &v)
 {
     n = v.n;
     arr = new double[v.n];
@@ -129,24 +132,39 @@ Vector::~Vector()
 }
 
 //Блок 1 --------------------------------
-Vector Vector::operator+(const Vector& b)
+Vector Vector::operator+(const Vector &b)
 {
+    if (n != b.n)
+    {
+        throw "Vectors have different dimensions";
+    }
+
     Vector res(n);
     for (int i = 0; i < n; i++)
         res[i] = arr[i] + b.arr[i];
     return res;
 }
 
-Vector Vector::operator-(const Vector& b)
+Vector Vector::operator-(const Vector &b)
 {
+    if (n != b.n)
+    {
+        throw "Vectors have different dimensions";
+    }
+
     Vector res(n);
     for (int i = 0; i < n; i++)
         res[i] = arr[i] - b.arr[i];
     return res;
 }
 
-double Vector::operator*(const Vector& b)
+double Vector::operator*(const Vector &b)
 {
+    if (n != b.n)
+    {
+        throw "Vectors have different dimensions";
+    }
+
     double sum = 0;
     for (int i = 0; i < n; i++)
         sum += arr[i] * b.arr[i];
@@ -189,6 +207,11 @@ Vector Vector::operator*(double b)
 
 Vector Vector::operator/(double b)
 {
+    if (b == 0)
+    {
+        throw "Division by zero (b = 0)";
+    }
+
     Vector res(n);
     for (int i = 0; i < n; i++)
         res.arr[i] = arr[i] / b;
@@ -197,7 +220,7 @@ Vector Vector::operator/(double b)
 
 //Блок 3 --------------------------------
 //Возврат вектора со ссылкой позволяет избежать ошибок с (x = y) = b
-Vector& Vector::operator=(const Vector& v)
+Vector &Vector::operator=(const Vector &v)
 {
     //Проверка на то, происходит ли присваивание объекта самому себе
     if (this == &v)
@@ -220,7 +243,7 @@ Vector& Vector::operator=(const Vector& v)
 }
 
 //Векторы только одинаковой длины
-Vector& Vector::operator+=(const Vector& v)
+Vector &Vector::operator+=(const Vector &v)
 {
     //Если у текущего вектора размер не совпадает с v,
     //то мы не можем сложить
@@ -236,7 +259,7 @@ Vector& Vector::operator+=(const Vector& v)
     return *this;
 }
 
-Vector& Vector::operator-=(const Vector& v)
+Vector &Vector::operator-=(const Vector &v)
 {
     if (n != v.n)
     {
@@ -250,7 +273,7 @@ Vector& Vector::operator-=(const Vector& v)
 }
 
 //Блок 4 --------------------------------
-Vector& Vector::operator+=(double b)
+Vector &Vector::operator+=(double b)
 {
     for (int i = 0; i < n; i++)
         arr[i] += b;
@@ -258,7 +281,7 @@ Vector& Vector::operator+=(double b)
     return *this;
 }
 
-Vector& Vector::operator-=(double b)
+Vector &Vector::operator-=(double b)
 {
     for (int i = 0; i < n; i++)
         arr[i] -= b;
@@ -266,7 +289,7 @@ Vector& Vector::operator-=(double b)
     return *this;
 }
 
-Vector& Vector::operator*=(double b)
+Vector &Vector::operator*=(double b)
 {
     for (int i = 0; i < n; i++)
         arr[i] *= b;
@@ -274,7 +297,7 @@ Vector& Vector::operator*=(double b)
     return *this;
 }
 
-Vector& Vector::operator/=(double b)
+Vector &Vector::operator/=(double b)
 {
     for (int i = 0; i < n; i++)
         arr[i] /= b;
@@ -282,7 +305,7 @@ Vector& Vector::operator/=(double b)
     return *this;
 }
 
-double& Vector::operator[](int i)
+double &Vector::operator[](int i)
 {
     if (i >= 0 && i < n)
         return arr[i];
@@ -360,5 +383,31 @@ int main()
 
     Vector test17 = 2 * v1;
     cout << "2 * v1 = " << test17 << '\n';
+
+    //Демонстрация ловли исключения
+    try
+    {
+        double a = test17[10];
+    }
+    catch (const char *str)
+    {
+        cout << "Произошла ошибка: " << str << '\n';
+    }
+
+    Vector t1(3);
+    Vector t2(4);
+    try
+    {
+        Vector t3 = t1 + t2;
+    }
+    catch (const char *str)
+    {
+        cout << "Произошла ошибка: " << str << '\n';
+    }
+    catch (...)
+    {
+        cout << "Совсем странные дела (-_-)" << '\n';
+    }
+
     return 0;
 }
